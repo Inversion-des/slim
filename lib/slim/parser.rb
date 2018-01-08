@@ -350,6 +350,11 @@ module Slim
       leading_ws = $&.include?('<'.freeze)
 
       parse_attributes(attributes)
+      
+      # fixed: additional attribute '\t'='' appears if we use multiline attributes
+      attributes.delete_if do |attr|
+        attr[2] == "\t"
+      end
 
       tag = [:html, :tag, tag, attributes]
 

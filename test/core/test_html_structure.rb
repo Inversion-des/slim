@@ -311,6 +311,20 @@ p[id="marvin" class="martian" data-info="Illudium Q-36"] = output_number
     assert_html '<p class="martian" data-info="Illudium Q-36" id="marvin">1337</p>', source
   end
 
+  def test_square_brackets_around_attributes_multiline
+    source = %q{
+div
+	p[
+		id="marvin"
+		class="martian"
+		data-info="Illudium Q-36"
+	]
+	p Next line
+}
+
+    assert_html '<div><p class="martian" data-info="Illudium Q-36" id="marvin"></p><p>Next line</p></div>', source
+  end
+
   def test_parens_around_attributes_with_equal_sign_snug_to_right_paren
     source = %q{
 p(id="marvin" class="martian" data-info="Illudium Q-36")= output_number
