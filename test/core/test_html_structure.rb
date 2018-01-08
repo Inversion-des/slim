@@ -115,6 +115,14 @@ h1#title This is my title
                 source, shortcut: {'^' => {tag: 'script', attr: 'data-binding', additional_attrs: { type: "application/json" }}}
   end
 
+  def test_render_with_custom_shortcut_and_additional_attrs
+    source = %q{
+ediv
+}
+    assert_html '<div contenteditable="true"></div>',
+                source, shortcut: {'ediv' => {tag:'div', additional_attrs: {contenteditable: 'true'}} }
+  end
+
   def test_render_with_text_block
     source = %q{
 p

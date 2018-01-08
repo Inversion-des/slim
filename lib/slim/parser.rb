@@ -59,7 +59,7 @@ module Slim
       options[:shortcut].each do |k,v|
         raise ArgumentError, 'Shortcut requires :tag and/or :attr' unless (v[:attr] || v[:tag]) && (v.keys - [:attr, :tag, :additional_attrs]).empty?
         @tag_shortcut[k] = v[:tag] || options[:default_tag]
-        if v.include?(:attr) || v.include?(:additional_attrs)
+        if v.include?(:attr)
           raise ArgumentError, 'You can only use special characters for attribute shortcuts' if k =~ /(\p{Word}|-)/
         end
         if v.include?(:attr)
@@ -321,11 +321,21 @@ module Slim
     def parse_tag(tag)
       if @tag_shortcut[tag]
         @line.slice!(0, tag.size) unless @attr_shortcut[tag]
+
+        additional_attr_pairs = @additional_attrs[tag]
+
         tag = @tag_shortcut[tag]
       end
 
       # Find any shortcut attributes
       attributes = [:html, :attrs]
+
+      if additional_attr_pairs
+        additional_attr_pairs.each do |k,v|
+          attributes << [:html, :attr, k.to_s, [:static, v]]
+        end
+      end
+
       while @line =~ @attr_shortcut_re
         # The class/id attribute is :static instead of :slim :interpolate,
         # because we don't want text interpolation in .class or #id shortcut
