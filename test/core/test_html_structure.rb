@@ -122,6 +122,21 @@ ediv
     assert_html '<div contenteditable="true"></div>',
                 source, shortcut: {'ediv' => {tag:'div', additional_attrs: {contenteditable: 'true'}} }
   end
+  
+  def test_alternative_way_to_add_custom_tag_shortcut
+    source = %q{
+ediv#id1.cls
+}
+    default = Slim::Parser.options[:shortcut].dup
+    
+    # *better than Slim::Engine.set_options, because we do not override default shortcuts
+    Slim::Parser.options[:shortcut].update({ 'ediv' => {tag:'div', additional_attrs: {contenteditable: 'true'}} })
+    
+    assert_html '<div class="cls" contenteditable="true" id="id1"></div>', source
+  
+  ensure
+	Slim::Parser.options[:shortcut] = default
+  end
 
   def test_render_with_text_block
     source = %q{
