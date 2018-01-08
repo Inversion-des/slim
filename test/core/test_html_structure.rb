@@ -1,4 +1,4 @@
-require 'helper'
+require_relative 'helper'
 
 class TestSlimHtmlStructure < TestSlim
   def test_simple_render
